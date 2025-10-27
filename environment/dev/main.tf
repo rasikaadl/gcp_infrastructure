@@ -17,3 +17,28 @@ module "gke" {
   node_count        = 2
   node_machine_type = "e2-medium"
 }
+
+#############################################
+provider "google" {
+project = var.project_id
+region = var.region
+}
+
+
+module "gke" {
+source = "../../modules/gke"
+project = var.project_id
+cluster_name = var.gke_cluster_name
+location = var.region
+network = var.network
+subnetwork = var.subnetwork
+node_count = 2
+node_machine_type = "e2-medium"
+node_preemptible = false
+node_labels = { env = "dev" }
+}
+
+
+output "gke_endpoint" {
+value = module.gke.endpoint
+}
